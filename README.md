@@ -30,4 +30,15 @@ L'utilisation de Visual Studio Code facilite la gestion des commits et la synchr
    ### 2.3 Sync
    Dans l'onglet "Contrôle de Codespace", cliquez sur "Synchroniser".
 
+## Accéder à la Base de Données
+
+Ce projet utilise un serveur postgres pour simplifier le processus de développement. Suivez ces étapes pour accéder à la base de données du Titanic.
+
+1. **Sur VS Code ouvrez un terminal**
+Appuyez sur `CTRL + MAJ + ù`.
+2. **Dans le terminal saisir la commande suivante `psql -h localhost -p 5432 -U postgres -d titanic`**
+3. **Saisir le mot de passe**
+`titanic`
+
+
 ## Pour plus d'informations, suivez ce [Tuto](https://univgrenoble-my.sharepoint.com/:p:/g/personal/barbiehu_azure_univ-grenoble-alpes_fr/EcIw1bH4SvhLlwR7hz4ytiQBoh5mEX5IM-PcyrC4V2iKmA?e=Lyt3de).
