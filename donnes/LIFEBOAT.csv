@@ -1,0 +1,21 @@
+LifeBoatId;LifeBoatCat;Side;Position;Location;Launch_time
+1;secours;tribord;avant;passerelle navigation;1:10:00 AM
+2;secours;babord;avant;passerelle navigation;1:45:00 AM
+3;standard;tribord;avant;pont;1:05:00 AM
+4;standard;babord;avant;pont;1:55:00 AM
+5;standard;tribord;avant;pont;1:55:00 AM
+6;standard;babord;avant;pont;1:55:00 AM
+7;standard;tribord;avant;pont;1:45:00 AM
+8;standard;babord;avant;pont;1:10:00 AM
+9;standard;tribord;arriere;pont;1:20:00 AM
+10;standard;babord;arriere;pont;1:20:00 AM
+11;standard;tribord;arriere;pont;1:25:00 AM
+12;standard;babord;arriere;pont;1:25:00 AM
+13;standard;tribord;arriere;pont;1:35:00 AM
+14;standard;babord;arriere;pont;1:30:00 AM
+15;standard;tribord;arriere;pont;1:35:00 AM
+16;standard;babord;arriere;pont;1:35:00 AM
+A;radeau;tribord;avant;toit quartier officiers;2:15:00 AM
+B;radeau;babord;avant;toit quartier officiers;2:15:00 AM
+C;radeau;tribord;avant;pont;1:40:00 AM
+D;radeau;babord;avant;pont;2:05:00 AM
