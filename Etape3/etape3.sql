@@ -171,5 +171,4 @@ WHERE age<12
 GROUP BY PClass
 ORDER BY PClass;
 
-
 -- psql -h postgres-info barbiehu -U barbiehu
