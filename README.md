@@ -36,4 +36,4 @@ L'utilisation de Visual Studio Code facilite la gestion des commits et la synchr
 ### 2.3 ***Sync*** 
         Dans l'onglet "Contrôle de Codespace" cliquer sur "Synchroniser".
 
-## Pour plus d'infos suivre le ce [Tuto](https://univgrenoble-my.sharepoint.com/:p:/g/personal/barbiehu_azure_univ-grenoble-alpes_fr/EcIw1bH4SvhLlwR7hz4ytiQBoh5mEX5IM-PcyrC4V2iKmA?e=Lyt3de).
+## Pour plus d'infos suivre ce [Tuto](https://univgrenoble-my.sharepoint.com/:p:/g/personal/barbiehu_azure_univ-grenoble-alpes_fr/EcIw1bH4SvhLlwR7hz4ytiQBoh5mEX5IM-PcyrC4V2iKmA?e=Lyt3de).
