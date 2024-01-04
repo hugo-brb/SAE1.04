@@ -1,10 +1,10 @@
 -------- insertion données de la base titanic ------------------------------------------------------------------
-\copy PORT FROM '/users/info/pub/1a/S1.04/Donnees_Titanic/PORTS.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
-\copy PASSENGER FROM '/users/info/pub/1a/S1.04/Donnees_Titanic/PASSENGERS.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
-\copy OCCUPATION FROM '/users/info/pub/1a/S1.04/Donnees_Titanic/OCCUPATION.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
-\copy SERVICE FROM '/users/info/pub/1a/S1.04/Donnees_Titanic/SERVICE.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
-\copy CATEGORY FROM '/users/info/pub/1a/S1.04/Donnees_Titanic/CATEGORY.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
-\copy LIFEBOAT FROM '/users/info/pub/1a/S1.04/Donnees_Titanic/LIFEBOAT.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
-\copy RECOVERY FROM '/users/info/pub/1a/S1.04/Donnees_Titanic/RECOVERY.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
-\copy RESCUE FROM '/users/info/pub/1a/S1.04/Donnees_Titanic/RESCUE.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
+\copy PORT FROM '/workspaces/SAE1.04/donnees/PORTS.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
+\copy PASSENGER FROM '/workspaces/SAE1.04/donnees/PASSENGERS.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
+\copy OCCUPATION FROM '/workspaces/SAE1.04/donnees/OCCUPATION.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
+\copy SERVICE FROM '/workspaces/SAE1.04/donnees/SERVICE.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
+\copy CATEGORY FROM '/workspaces/SAE1.04/donnees/CATEGORY.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
+\copy LIFEBOAT FROM '/workspaces/SAE1.04/donnees/LIFEBOAT.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
+\copy RECOVERY FROM '/workspaces/SAE1.04/donnees/RECOVERY.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
+\copy RESCUE FROM '/workspaces/SAE1.04/donnees/RESCUE.csv' WITH (DELIMITER ';', format CSV, HEADER, ENCODING 'UTF8');
 ----------------------------------------------------------------------------------------------------------------
