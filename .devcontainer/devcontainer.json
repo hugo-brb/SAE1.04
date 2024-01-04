@@ -1,0 +1,8 @@
+{
+  "name": "Codespace Configuration",
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
+  "service": "postgres",
+  "shutdownAction": "stopCompose"
+}
