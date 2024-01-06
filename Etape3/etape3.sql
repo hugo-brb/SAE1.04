@@ -267,3 +267,11 @@ SELECT
     (SELECT COUNT(*) 
     FROM PASSENGER 
     WHERE Survived = 1 and PClass = 3) as Nombre_total_rescapes_3ieme_classe;
+
+
+-- B --
+-- (a) Check if all domestics have been rescued
+SELECT COUNT(*) AS Total_Domestics,
+     COUNT(CASE WHEN Survived = 1 THEN 1 END) AS Rescued_Domestics
+FROM PASSENGER
+WHERE Occupation = 'Domestic';
