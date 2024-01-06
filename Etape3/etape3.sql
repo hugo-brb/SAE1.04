@@ -171,4 +171,99 @@ WHERE age<12
 GROUP BY PClass
 ORDER BY PClass;
 
--- psql -h postgres-info barbiehu -U barbiehu
+
+
+
+
+-- A4 --
+-- (a) Nombre total d'enfants et nombre d'enfants rescapés
+SELECT
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Age < 12) as Nombre_total_enfants,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Age < 12 and Survived = 1) as Nombre_enfants_rescapes;
+
+-- (b) Nombre d'enfants qui ont survécu parmi les enfants qui ont été rescapés
+SELECT
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Age < 12 and Survived = 1) as Nombre_enfants_rescapes,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Age < 12 and Survived = 1 and PClass = 1) as Nombre_enfants_rescapes_1ere_classe,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Age < 12 and Survived = 1 and PClass = 2) as Nombre_enfants_rescapes_2ieme_classe,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Age < 12 and Survived = 1 and PClass = 3) as Nombre_enfants_rescapes_3ieme_classe;
+
+-- (c) Pour chaque classe de passagers : nombre d'enfants qui ont survécu parmi les enfants rescapés
+SELECT
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Age < 12 and Survived = 1 and PClass = 1) as Nombre_enfants_rescapes_1ere_classe,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Age < 12 and Survived = 1 and PClass = 2) as Nombre_enfants_rescapes_2ieme_classe,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Age < 12 and Survived = 1 and PClass = 3) as Nombre_enfants_rescapes_3ieme_classe;
+
+-- (d) Taux de rescapés parmi les passagers
+SELECT round(avg(survived*100),2) as taux_rescapes
+FROM PASSENGER
+WHERE Survived = 1;
+
+-- (e) Nombre de rescapés par catégorie de passager (enfant, femme ou homme)
+SELECT 
+  CASE 
+    WHEN Age < 18 THEN 'Enfant'
+    WHEN Sex = 'female' THEN 'Femme'
+    ELSE 'Homme'
+  END AS Categorie,
+  COUNT(*) AS Nombre_de_rescapes
+FROM PASSENGER
+WHERE Survived = 1
+GROUP BY Categorie;
+
+-- (f) Nombre de survivants par catégorie de rescapés (enfant, femme ou homme)
+SELECT 
+  CASE 
+    WHEN Age < 18 THEN 'Enfant'
+    WHEN Sex = 'female' THEN 'Femme'
+    ELSE 'Homme'
+  END AS Categorie,
+  COUNT(*) AS Nombre_de_rescapes
+FROM PASSENGER
+WHERE Survived = 1
+GROUP BY Categorie;
+
+-- (g) Nombre total de rescapés et taux de survivants par embarcation - résultat ordonné sur le code de l'embarcation
+SELECT
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Survived = 1) as Nombre_total_rescapes,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Survived = 1 and PClass = 1) as Nombre_total_rescapes_1ere_classe,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Survived = 1 and PClass = 2) as Nombre_total_rescapes_2ieme_classe,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Survived = 1 and PClass = 3) as Nombre_total_rescapes_3ieme_classe;
+
+-- (h) Pour chaque classe de passager, nombre d'enfants, nombre de femmes et nombre d'hommes qui ont survécu parmi les rescapés
+SELECT
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Survived = 1 and PClass = 1) as Nombre_total_rescapes_1ere_classe,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Survived = 1 and PClass = 2) as Nombre_total_rescapes_2ieme_classe,
+    (SELECT COUNT(*) 
+    FROM PASSENGER 
+    WHERE Survived = 1 and PClass = 3) as Nombre_total_rescapes_3ieme_classe;
