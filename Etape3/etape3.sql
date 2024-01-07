@@ -125,18 +125,18 @@ SELECT
 SELECT
     (SELECT COUNT(*) 
     FROM PASSENGER 
-    WHERE Sex = 'female' and Survived = 0) as Nombre_femme_mort,
+    WHERE Sex = 'female' and age>=12 and Survived = 0) as Nombre_femme_mort,
     (SELECT COUNT(*) 
     FROM PASSENGER 
-    WHERE Sex = 'female' and Survived = 1) as Nombre_femme_survivants;
+    WHERE Sex = 'female' and age>=12 and  Survived = 1) as Nombre_femme_survivants;
     
 SELECT
     (SELECT COUNT(*) 
     FROM PASSENGER 
-    WHERE Sex = 'male' and Survived = 0) as Nombre_homme_mort,
+    WHERE Sex = 'male' and age>=12 and Survived = 0) as Nombre_homme_mort,
     (SELECT COUNT(*) 
     FROM PASSENGER 
-    WHERE Sex = 'male' and Survived = 1) as Nombre_homme_survivants;
+    WHERE Sex = 'male' and age>=12 and Survived = 1) as Nombre_homme_survivants;
     -- Autre possibilité
 /*SELECT 
     CASE 
@@ -149,126 +149,173 @@ FROM PASSENGER
 WHERE Survived = 1
 GROUP BY Categorie;*/
 
+
 -- PARTIE A3 --------------------------------------------------------------------------------------
 
 -- taux de survivants par classe, toutes catégories confondues (enfants, femmes ou hommes)
-SELECT round(avg(survived*100),2) as taux_survivants
-FROM PASSENGER
-WHERE age < 12 and PClass = 2;
 
-
-
-SELECT PClass, round(avg(survived*100),2) as taux_survivants
+SELECT PClass as classe, round(avg(survived*100),2) as taux_survivants
 FROM PASSENGER
 GROUP BY PClass
 ORDER BY PClass;
 
+
 -- Taux de survivants par classe dans la catégorie enfants
 
-SELECT PClass, round(avg(survived*100),2) as taux_survivants
+SELECT PClass as classe, round(avg(survived*100),2) as taux_survivants
 FROM PASSENGER
 WHERE age<12
+GROUP BY PClass
+ORDER BY PClass;
+
+-- Taux de survivants par classe dans la catégorie femme
+
+SELECT PClass as classe, round(avg(survived*100),2) as taux_survivants
+FROM PASSENGER
+WHERE Sex = 'female' and age>=12
+GROUP BY PClass
+ORDER BY PClass;
+
+-- Taux de survivants par classe dans la catégorie hommes
+
+SELECT PClass as classe, round(avg(survived*100),2) as taux_survivants
+FROM PASSENGER
+WHERE Sex = 'male' and age>=12
 GROUP BY PClass
 ORDER BY PClass;
 
 
 -- A4 --
 -- (a) Nombre total d'enfants et nombre d'enfants rescapés
+
+
 SELECT
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Age < 12) as Nombre_total_enfants,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Age < 12 and Survived = 1) as Nombre_enfants_rescapes;
+    (SELECT COUNT(*)
+    FROM PASSENGER
+    WHERE Age < 12) as nb_enfants,
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE p.PassengerID = r.PassengerID
+    and p.Age < 12) as nb_enfants_rescapes;
 
 -- (b) Nombre d'enfants qui ont survécu parmi les enfants qui ont été rescapés
-SELECT
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Age < 12 and Survived = 1) as Nombre_enfants_rescapes,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Age < 12 and Survived = 1 and PClass = 1) as Nombre_enfants_rescapes_1ere_classe,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Age < 12 and Survived = 1 and PClass = 2) as Nombre_enfants_rescapes_2ieme_classe,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Age < 12 and Survived = 1 and PClass = 3) as Nombre_enfants_rescapes_3ieme_classe;
+
+
+SELECT COUNT(*) as nb_enfants_surv_dans_rescapes
+FROM RESCUE r, PASSENGER p
+WHERE r.PassengerID = p.PassengerID
+and Survived = 1
+and p.Age < 12;
 
 -- (c) Pour chaque classe de passagers : nombre d'enfants qui ont survécu parmi les enfants rescapés
+
 SELECT
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Age < 12 and Survived = 1 and PClass = 1) as Nombre_enfants_rescapes_1ere_classe,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Age < 12 and Survived = 1 and PClass = 2) as Nombre_enfants_rescapes_2ieme_classe,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Age < 12 and Survived = 1 and PClass = 3) as Nombre_enfants_rescapes_3ieme_classe;
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE r.PassengerID = p.PassengerID
+    and Survived = 1
+    and PClass = 1
+    and p.Age < 12) as nb_enfts_class1_surv_dans_rescapes,
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE r.PassengerID = p.PassengerID
+    and Survived = 1
+    and PClass = 3
+    and p.Age < 12) as nb_enfts_class2_surv_dans_rescapes,
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE r.PassengerID = p.PassengerID
+    and Survived = 1
+    and PClass = 2
+    and p.Age < 12) as nb_enfts_class3_surv_dans_rescapes;
+
 
 -- (d) Taux de rescapés parmi les passagers
-SELECT round(avg(survived*100),2) as taux_rescapes
-FROM PASSENGER
-WHERE Survived = 1;
+
+SELECT round(100 *
+    (SELECT count(*) FROM RESCUE) / 
+    (SELECT COUNT(*) FROM PASSENGER),2) as taux_rescapes;
 
 -- (e) Nombre de rescapés par catégorie de passager (enfant, femme ou homme)
-SELECT 
-  CASE 
-    WHEN Age < 18 THEN 'Enfant'
-    WHEN Sex = 'female' THEN 'Femme'
-    ELSE 'Homme'
-  END AS Categorie,
-  COUNT(*) AS Nombre_de_rescapes
-FROM PASSENGER
-WHERE Survived = 1
-GROUP BY Categorie;
+
+SELECT (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE p.PassengerID = r.PassengerID
+    and p.Age < 12) as nb_enfants_rescapes,
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE p.PassengerID = r.PassengerID
+    and Sex='female' and age>=12) as nb_femmes_rescapes,
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE p.PassengerID = r.PassengerID
+    and Sex='male' and age>=12) as nb_hommes_rescapes;
+
+
 
 -- (f) Nombre de survivants par catégorie de rescapés (enfant, femme ou homme)
-SELECT 
-  CASE 
-    WHEN Age < 18 THEN 'Enfant'
-    WHEN Sex = 'female' THEN 'Femme'
-    ELSE 'Homme'
-  END AS Categorie,
-  COUNT(*) AS Nombre_de_rescapes
-FROM PASSENGER
-WHERE Survived = 1
-GROUP BY Categorie;
+
+SELECT (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE r.PassengerID = p.PassengerID
+    and Survived = 1
+    and p.Age < 12) as nb_enfants_surv_dans_rescapes,
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE r.PassengerID = p.PassengerID
+    and Survived = 1
+    and Sex='female' and age>=12) as nb_femmes_surv_dans_rescapes,
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE r.PassengerID = p.PassengerID
+    and Survived = 1
+    and Sex='male' and age>=12) as nb_hommes_surv_dans_rescapes;
 
 -- (g) Nombre total de rescapés et taux de survivants par embarcation - résultat ordonné sur le code de l'embarcation
-SELECT
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Survived = 1) as Nombre_total_rescapes,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Survived = 1 and PClass = 1) as Nombre_total_rescapes_1ere_classe,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Survived = 1 and PClass = 2) as Nombre_total_rescapes_2ieme_classe,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Survived = 1 and PClass = 3) as Nombre_total_rescapes_3ieme_classe;
+
+SELECT LifeBoatId, count(LifeBoatId) as nb_rescapes, 100*(SELECT COUNT(PassengerID) 
+      FROM PASSENGER 
+      WHERE PassengerID IN (SELECT PassengerID 
+            FROM RESCUE r2 
+            WHERE r2.LifeBoatId = r1.LifeBoatId)
+      and survived=1 ) / count(LifeBoatId) as taux_survivants
+FROM RESCUE r1
+GROUP BY LifeBoatId
+ORDER BY LifeboatId;
 
 -- (h) Pour chaque classe de passager, nombre d'enfants, nombre de femmes et nombre d'hommes qui ont survécu parmi les rescapés
-SELECT
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Survived = 1 and PClass = 1) as Nombre_total_rescapes_1ere_classe,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Survived = 1 and PClass = 2) as Nombre_total_rescapes_2ieme_classe,
-    (SELECT COUNT(*) 
-    FROM PASSENGER 
-    WHERE Survived = 1 and PClass = 3) as Nombre_total_rescapes_3ieme_classe;
+
+
+SELECT PClass as classe, (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE r.PassengerID = p.PassengerID
+    and Survived = 1
+    and p.Age < 12
+    and p.PClass = p2.PClass) as nb_enfants_surv_dans_rescapes,
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE r.PassengerID = p.PassengerID
+    and Survived = 1
+    and Sex='female' and age>=12
+    and p.PClass = p2.PClass) as nb_femmes_surv_dans_rescapes,
+    (SELECT COUNT(*)
+    FROM RESCUE r, PASSENGER p
+    WHERE r.PassengerID = p.PassengerID
+    and Survived = 1
+    and Sex='male' and age>=12
+    and p.PClass = p2.PClass) as nb_hommes_surv_dans_rescapes
+FROM PASSENGER p2
+GROUP BY PClass
+ORDER BY PClass;
+
 
 
 -- B --
--- (a) Check if all domestics have been rescued
+-- (a) On verifie si les domestiques ont été rescapés
 SELECT COUNT(*) AS Total_Domestics,
      COUNT(CASE WHEN Survived = 1 THEN 1 END) AS Rescued_Domestics
 FROM PASSENGER
 WHERE Occupation = 'Domestic';
+
+
+
