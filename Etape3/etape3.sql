@@ -172,9 +172,6 @@ GROUP BY PClass
 ORDER BY PClass;
 
 
-fugup$)
-
-
 -- A4 --
 -- (a) Nombre total d'enfants et nombre d'enfants rescapés
 SELECT
