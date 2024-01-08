@@ -318,4 +318,70 @@ FROM PASSENGER
 WHERE Occupation = 'Domestic';
 
 
+-- Q4 : Taux de survie par tranche d'âge parmi les passagers ayant au moins 12 ans lors du naufrage :
+-- Tranches : 12-16 ans, 17-29 ans, 30-39 ans, 40-49 ans, 50-59 ans, 60-69 ans, et +70 ans
+
+SELECT (SELECT round(avg(survived*100),2)
+    FROM PASSENGER
+    WHERE age>=12
+    and age<16) as taux_12_16ans,
+    (SELECT round(avg(survived*100),2)
+    FROM PASSENGER
+    WHERE age>=17
+    and age<30) as taux_17_29ans,
+    (SELECT round(avg(survived*100),2)
+    FROM PASSENGER
+    WHERE age>=30
+    and age<40) as taux_30_39ans,
+    (SELECT round(avg(survived*100),2)
+    FROM PASSENGER
+    WHERE age>=40
+    and age<50) as taux_40_49ans,
+    (SELECT round(avg(survived*100),2)
+    FROM PASSENGER
+    WHERE age>=50
+    and age<60) as taux_50_59ans,
+    (SELECT round(avg(survived*100),2)
+    FROM PASSENGER
+    WHERE age>=60
+    and age<70) as taux_60_69ans,
+    (SELECT round(avg(survived*100),2)
+    FROM PASSENGER
+    WHERE age>=70) as taux_plus_70ans;
+
+
+
+--Q5 Combien de passagers supplémentaires auraient pu être rescapés (et peut-être survivre) si le taux
+-- maximum de remplissage des embarcations de sauvetage avait été respecté ?
+
+-- selon les données du site https://titanic-1912.fr/ menu : "Les canots de sauvetage" => "Bilan du sauvetage",
+-- le nombre moyen de membre d'équipage est ±6 par canot. Je vais donc ajouter artificielement 6 personnes
+-- par canot pour avoir un nombre approximatif de places libres.
+
+
+-- Première requête qui donne le nombre de rescapés, de places, et de places libres pour chaque canot :
+
+SELECT r.LifeBoatId, count(r.LifeBoatId)+6 as nb_rescapes, places as places, places-6-count(r.LifeBoatId) as nb_places_libres
+FROM RESCUE r, CATEGORY c, LIFEBOAT l
+WHERE r.LifeBoatId = l.LifeBoatId
+and l.LifeBoatCat = c.LifeBoatCat
+GROUP BY r.LifeBoatId, places
+ORDER BY r.LifeboatId;
+
+
+-- Requête qui donne le nombre de rescapés, de places, et de places libres pour tous les canots :
+
+
+SELECT SUM(nb_rescapes) as total_rescapes, SUM(places) as nb_places_max, SUM(nb_places_libres) as total_places_libres
+FROM (
+    SELECT count(r.LifeBoatId)+6 as nb_rescapes, places as places, places-6-count(r.LifeBoatId) as nb_places_libres
+    FROM RESCUE r, CATEGORY c, LIFEBOAT l
+    WHERE r.LifeBoatId = l.LifeBoatId
+    and l.LifeBoatCat = c.LifeBoatCat
+    GROUP BY r.LifeBoatId, places
+    ORDER BY r.LifeboatId) as somme;
+
+
+
+
 
