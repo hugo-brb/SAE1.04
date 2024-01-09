@@ -293,12 +293,19 @@ GROUP BY l.LifeBoatId
 ORDER BY l.LifeboatId;
 
 -- 3) Influence de l'heure de mise à l'eau des embarcations de sauvetage sur le taux de survie des passagers qui y ont pris place (ou encore, influence de l'heure de récupération de ces embarcations par le Carpathia)?
-SELECT l.LifeBoatId, launching_time, (SELECT recovery_time 
-FROM RECOVERY WHERE LifeBoatId = l.LifeBoatId), 100*(SELECT count(*) FROM PASSENGER
-WHERE passengerid in (SELECT passengerid FROM RESCUE WHERE LifeBoatId = l.LifeBoatId))/count(r.LifeBoatId) as taux_survivants
+SELECT l.LifeBoatId, launching_time, 
+(SELECT recovery_time 
+FROM RECOVERY
+WHERE l.LifeBoatId = RECOVERY.LifeBoatId), 
+100*(SELECT COUNT(PassengerID) 
+      FROM PASSENGER 
+      WHERE PassengerID IN (SELECT PassengerID 
+            FROM RESCUE r2 
+            WHERE r2.LifeBoatId = l.LifeBoatId) 
+      and survived=1 )/count(r.LifeBoatId) as taux_survivants
 FROM LIFEBOAT l, RESCUE r
 WHERE l.LifeBoatId = r.LifeBoatId
-GROUP BY l.LifeBoatId
+GROUP BY l.LifeBoatId, recovery_time
 ORDER BY l.LifeboatId;
 
 -- 4) Taux de survie par tranche d'âge parmi les passagers ayant au moins 12 ans lors du naufrage :
